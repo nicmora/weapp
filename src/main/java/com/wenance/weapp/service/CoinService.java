@@ -3,7 +3,7 @@ package com.wenance.weapp.service;
 import java.time.Instant;
 import java.util.List;
 
-import com.wenance.weapp.dto.CoinAveragePercentage;
+import com.wenance.weapp.dto.CoinAvgMaxDTO;
 import com.wenance.weapp.entity.Coin;
 
 import reactor.core.publisher.Flux;
@@ -15,10 +15,10 @@ public interface CoinService {
 	
 	Mono<Coin> findByTimestamp(Instant timestamp);
 
-	Mono<CoinAveragePercentage> getAverageAndPercentageMaxByTimestamps(Instant timestampOne, Instant timestampTwo);
+	Mono<CoinAvgMaxDTO> getAverageAndMaxByTimestamps(Instant timestampOne, Instant timestampTwo);
 
 	Flux<List<Coin>> findCoinsBetweenTimestamps(Instant timestampOne, Instant timestampTwo);
 
-	void save(Coin coin);
+	Mono<Coin> save(Coin coin);
 
 }

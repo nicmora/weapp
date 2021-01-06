@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wenance.weapp.dto.CoinAveragePercentage;
+import com.wenance.weapp.dto.CoinAvgMaxDTO;
 import com.wenance.weapp.entity.Coin;
 import com.wenance.weapp.repository.CoinRepository;
 
@@ -35,15 +35,14 @@ public class CoinServiceImpl implements CoinService {
 	}
 	
 	@Override
-	public Mono<CoinAveragePercentage> getAverageAndPercentageMaxByTimestamps(Instant timestampOne,
+	public Mono<CoinAvgMaxDTO> getAverageAndMaxByTimestamps(Instant timestampOne,
 			Instant timestampTwo) {
-		// TODO Auto-generated method stub
-		return null;
+		return Mono.just(coinRepository.getAvgAndMaxByTimestampBetween(timestampOne, timestampTwo));
 	}
 
 	@Override
-	public void save(Coin coin) {
-		coinRepository.save(coin);
+	public Mono<Coin> save(Coin coin) {
+		return Mono.just(coinRepository.save(coin));
 	}
 
 }
