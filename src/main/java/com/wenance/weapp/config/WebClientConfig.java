@@ -14,10 +14,11 @@ public class WebClientConfig {
 	private String BASE_URL;
 
 	@Bean
-	public WebClient getWebClient() {
+	public WebClient createWebClient() {
 		return WebClient.builder()
 				.baseUrl(BASE_URL)
-				.defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+		        .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
 				.build();
 	}
 
