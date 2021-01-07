@@ -1,6 +1,6 @@
-package com.wenance.weapp.service;
+package com.wenance.weapp.service.impl;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.wenance.weapp.dto.CoinAvgMaxDTO;
 import com.wenance.weapp.entity.Coin;
 import com.wenance.weapp.repository.CoinRepository;
+import com.wenance.weapp.service.CoinService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -25,18 +26,18 @@ public class CoinServiceImpl implements CoinService {
 	}
 
 	@Override
-	public Mono<Coin> findByTimestamp(Instant timestamp) {
+	public Mono<Coin> findByTimestamp(LocalDateTime timestamp) {
 		return Mono.just(coinRepository.findByTimestamp(timestamp));
 	}
 	
 	@Override
-	public Flux<List<Coin>> findCoinsBetweenTimestamps(Instant timestampOne, Instant timestampTwo) {
+	public Flux<List<Coin>> findCoinsBetweenTimestamps(LocalDateTime timestampOne, LocalDateTime timestampTwo) {
 		return Flux.just(coinRepository.findByTimestampBetween(timestampOne, timestampTwo));
 	}
 	
 	@Override
-	public Mono<CoinAvgMaxDTO> getAverageAndMaxByTimestamps(Instant timestampOne,
-			Instant timestampTwo) {
+	public Mono<CoinAvgMaxDTO> getAverageAndMaxByTimestamps(LocalDateTime timestampOne,
+			LocalDateTime timestampTwo) {
 		return Mono.just(coinRepository.getAvgAndMaxByTimestampBetween(timestampOne, timestampTwo));
 	}
 

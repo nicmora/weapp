@@ -1,6 +1,6 @@
 package com.wenance.weapp.scheduler;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,12 +26,12 @@ public class CoinScheduler {
 	@Scheduled(fixedRate = 10000)
 	public void fetchAndSaveCoin() {
 
-		Mono<String> monoCoin = cexService.fetch();
+		Mono<String> monoResponse = cexService.updatePrice();
 
-		monoCoin.subscribe(body -> {
+		monoResponse.subscribe(response -> {
 			try {
-				Coin coin = new ObjectMapper().readValue(body, Coin.class);
-				coin.setTimestamp(Instant.now());
+				Coin coin = new ObjectMapper().readValue(response, Coin.class);
+				coin.setTimestamp(LocalDateTime.now());
 				
 				coinService.save(coin);
 			} catch (JsonProcessingException e) {

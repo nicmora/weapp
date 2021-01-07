@@ -1,6 +1,6 @@
 package com.wenance.weapp.service;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.wenance.weapp.dto.CoinAvgMaxDTO;
@@ -13,11 +13,11 @@ public interface CoinService {
 
 	Flux<List<Coin>> findAll();
 	
-	Mono<Coin> findByTimestamp(Instant timestamp);
+	Mono<Coin> findByTimestamp(LocalDateTime timestamp);
 
-	Mono<CoinAvgMaxDTO> getAverageAndMaxByTimestamps(Instant timestampOne, Instant timestampTwo);
+	Mono<CoinAvgMaxDTO> getAverageAndMaxByTimestamps(LocalDateTime timestampOne, LocalDateTime timestampTwo);
 
-	Flux<List<Coin>> findCoinsBetweenTimestamps(Instant timestampOne, Instant timestampTwo);
+	Flux<List<Coin>> findCoinsBetweenTimestamps(LocalDateTime timestampOne, LocalDateTime timestampTwo);
 
 	Mono<Coin> save(Coin coin);
 

@@ -4,6 +4,6 @@ import reactor.core.publisher.Mono;
 
 public interface CexService {
 	
-	Mono<String> fetch();
+	Mono<String> updatePrice();
 
 }

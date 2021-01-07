@@ -1,9 +1,12 @@
 package com.wenance.weapp.controller;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,22 +31,22 @@ public class CoinController {
 		return coinService.findAll();
 	}
 
-	@GetMapping("/coin")
-	public Mono<Coin> getCoinByTimestamp(@RequestParam Instant timestamp) {
+	/*@GetMapping("/coin")
+	public Mono<Coin> getCoinByTimestamp(@NotNull @RequestParam LocalDateTime timestamp) {
 		return coinService.findByTimestamp(timestamp);
-	}
+	}*/
 	
 	@GetMapping("/coins/timestamps")
 	public Flux<List<Coin>> getCoinsBetweenTimestamps(
-			@RequestParam Instant timestampOne,
-			@RequestParam Instant timestampTwo) {
+			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampOne,
+			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampTwo) {
 		return coinService.findCoinsBetweenTimestamps(timestampOne, timestampTwo);
 	}
 
 	@GetMapping("/coin/avg")
-	public Mono<CoinAvgMaxDTO> getAverageAndPercentageMaxByTimestamps(
-			@RequestParam Instant timestampOne,
-			@RequestParam Instant timestampTwo) {
+	public Mono<CoinAvgMaxDTO> getAverageAndMaxByTimestamps(
+			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampOne,
+			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampTwo) {
 		return coinService.getAverageAndMaxByTimestamps(timestampOne, timestampTwo);
 	}
 
