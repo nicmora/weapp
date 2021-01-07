@@ -1,6 +1,5 @@
 package com.wenance.weapp.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -10,16 +9,21 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Coin {
 
 	@Id
@@ -27,7 +31,8 @@ public class Coin {
 	private Long id;
 
 	@NotNull
-	private BigDecimal lprice;
+	@NumberFormat(style = Style.CURRENCY)
+	private Double lprice;
 
 	@NotEmpty
 	private String curr1;

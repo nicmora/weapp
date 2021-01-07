@@ -1,7 +1,6 @@
 package com.wenance.weapp.controller;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wenance.weapp.dto.CoinAvgMaxDTO;
+import com.wenance.weapp.dto.AvgMaxDTO;
 import com.wenance.weapp.entity.Coin;
 import com.wenance.weapp.service.CoinService;
 
@@ -27,27 +26,27 @@ public class CoinController {
 	CoinService coinService;
 
 	@GetMapping("/coins")
-	public Flux<List<Coin>> getAll() {
+	public Flux<Coin> getAll() {
 		return coinService.findAll();
 	}
 
-	/*@GetMapping("/coin")
-	public Mono<Coin> getCoinByTimestamp(@NotNull @RequestParam LocalDateTime timestamp) {
+	@GetMapping("/coin")
+	public Mono<Coin> getCoinByTimestamp(@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestamp) {
 		return coinService.findByTimestamp(timestamp);
-	}*/
+	}
 	
 	@GetMapping("/coins/timestamps")
-	public Flux<List<Coin>> getCoinsBetweenTimestamps(
+	public Flux<Coin> getCoinsBetweenTimestamps(
 			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampOne,
 			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampTwo) {
 		return coinService.findCoinsBetweenTimestamps(timestampOne, timestampTwo);
 	}
 
-	@GetMapping("/coin/avg")
-	public Mono<CoinAvgMaxDTO> getAverageAndMaxByTimestamps(
+	@GetMapping("/coins/avg")
+	public Mono<AvgMaxDTO> getAverageAndMaxByTimestamps(
 			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampOne,
 			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampTwo) {
-		return coinService.getAverageAndMaxByTimestamps(timestampOne, timestampTwo);
+		return coinService.getAvgAndMaxByTimestamps(timestampOne, timestampTwo);
 	}
 
 }

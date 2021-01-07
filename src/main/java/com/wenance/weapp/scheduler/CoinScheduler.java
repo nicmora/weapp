@@ -2,13 +2,15 @@ package com.wenance.weapp.scheduler;
 
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wenance.weapp.entity.Coin;
+import com.wenance.weapp.exception.CoinException;
 import com.wenance.weapp.service.CexService;
 import com.wenance.weapp.service.CoinService;
 
@@ -16,6 +18,8 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class CoinScheduler {
+	
+	private static final Logger logger = LoggerFactory.getLogger(CoinScheduler.class);
 
 	@Autowired
 	CexService cexService;
@@ -27,16 +31,16 @@ public class CoinScheduler {
 	public void fetchAndSaveCoin() {
 
 		Mono<String> monoResponse = cexService.updatePrice();
-
 		monoResponse.subscribe(response -> {
+			Coin coin = null;
 			try {
-				Coin coin = new ObjectMapper().readValue(response, Coin.class);
+				coin = new ObjectMapper().readValue(response, Coin.class);
 				coin.setTimestamp(LocalDateTime.now());
-				
-				coinService.save(coin);
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new CoinException(e.getMessage());
 			}
+			logger.info(coin.toString());
+			coinService.save(coin);
 		});
 
 	}
