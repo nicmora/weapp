@@ -6,33 +6,31 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebInputException;
 
-@ControllerAdvice
+@ControllerAdvice(annotations = RestController.class)
 public class CoinExceptionHandler {
-	
-	@ExceptionHandler(ServerWebInputException.class)
-	public ResponseEntity<CoinError> serverWebInputException(ServerWebInputException ex) {
-		ex.printStackTrace();
-		CoinError coinError = new CoinError(
-				LocalDateTime.now(),
-				HttpStatus.BAD_REQUEST, 
-				ex.getReason(), 
-				ex.getMessage());
 
-		return new ResponseEntity<CoinError>(coinError, HttpStatus.BAD_REQUEST);
+	@ExceptionHandler(ServerWebInputException.class)
+	protected ResponseEntity<CoinError> handleServerWebInputException(ServerWebInputException e) {
+		e.printStackTrace();
+		return buildCoinError(HttpStatus.BAD_REQUEST, e);
 	}
 	
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<CoinError> globalExceptionHandler(Exception ex) {
-		ex.printStackTrace();
+	protected ResponseEntity<CoinError> handleException(Exception e) {
+		e.printStackTrace();
+		return buildCoinError(HttpStatus.INTERNAL_SERVER_ERROR, e);
+	}
+	
+	private ResponseEntity<CoinError> buildCoinError(HttpStatus status, Exception e) {
 		CoinError coinError = new CoinError(
-				LocalDateTime.now(),
-				HttpStatus.INTERNAL_SERVER_ERROR, 
-				ex.getMessage(), 
-				ex.getMessage());
-
-		return new ResponseEntity<CoinError>(coinError, HttpStatus.INTERNAL_SERVER_ERROR);
+				LocalDateTime.now(), 
+				status, 
+				"WEAPP-ERROR " + e.getMessage());
+		
+		return new ResponseEntity<CoinError>(coinError, status);
 	}
 
 }

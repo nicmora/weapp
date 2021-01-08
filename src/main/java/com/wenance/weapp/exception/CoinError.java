@@ -20,8 +20,6 @@ public class CoinError {
 	
 	private HttpStatus status;
 	
-	private String error;
-	
 	private String message; 
 
 }

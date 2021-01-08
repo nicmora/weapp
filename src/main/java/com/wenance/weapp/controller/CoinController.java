@@ -19,30 +19,30 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/coins")
 public class CoinController {
 
 	@Autowired
 	CoinService coinService;
 
-	@GetMapping("/coins")
+	@GetMapping
 	public Flux<Coin> getAll() {
 		return coinService.findAll();
 	}
 
-	@GetMapping("/coin")
+	@GetMapping("/get-coin")
 	public Mono<Coin> getCoinByTimestamp(@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestamp) {
 		return coinService.findByTimestamp(timestamp);
 	}
 	
-	@GetMapping("/coins/timestamps")
+	@GetMapping("/get-coins")
 	public Flux<Coin> getCoinsBetweenTimestamps(
 			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampOne,
 			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampTwo) {
 		return coinService.findCoinsBetweenTimestamps(timestampOne, timestampTwo);
 	}
 
-	@GetMapping("/coins/avg")
+	@GetMapping("/avg-max")
 	public Mono<AvgMaxDTO> getAverageAndMaxByTimestamps(
 			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampOne,
 			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampTwo) {
