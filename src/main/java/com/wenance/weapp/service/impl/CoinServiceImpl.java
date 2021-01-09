@@ -21,8 +21,12 @@ import reactor.core.publisher.Mono;
 @Service
 public class CoinServiceImpl implements CoinService {
 
-	@Autowired
 	private CoinRepository coinRepository;
+	
+	@Autowired
+	public CoinServiceImpl(CoinRepository coinRepository) {
+		this.coinRepository = coinRepository;
+	}
 
 	@Override
 	public Flux<Coin> findAll() {
