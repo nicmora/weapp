@@ -4,6 +4,11 @@ import reactor.core.publisher.Mono;
 
 public interface CexService {
 	
-	Mono<String> updatePrice();
+	/**
+	 * Método que realiza un fetch mediante WebClient a la api externa: 
+	 * {@link https://cex.io/api/last_price/BTC/USD}
+	 * @return String con la actualización del precio de BTC/USD
+	 */
+	Mono<String> fetchPrice();
 
 }

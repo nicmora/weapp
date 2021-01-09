@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AvgMaxDTO {
+public class AvgChgDTO {
 
 	@NumberFormat(style = Style.CURRENCY)
 	private Double average;
 
-	@NumberFormat(style = Style.CURRENCY)
-	private Double max;
+	@NumberFormat(style = Style.PERCENT)
+	private Double change;
 
 }

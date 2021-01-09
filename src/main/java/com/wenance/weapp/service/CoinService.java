@@ -2,7 +2,7 @@ package com.wenance.weapp.service;
 
 import java.time.LocalDateTime;
 
-import com.wenance.weapp.dto.AvgMaxDTO;
+import com.wenance.weapp.dto.AvgChgDTO;
 import com.wenance.weapp.entity.Coin;
 
 import reactor.core.publisher.Flux;
@@ -14,9 +14,22 @@ public interface CoinService {
 	
 	Mono<Coin> findByTimestamp(LocalDateTime timestamp);
 
-	Flux<Coin> findCoinsBetweenTimestamps(LocalDateTime timestampOne, LocalDateTime timestampTwo);
+	/**
+	 * Realiza una búsqueda mediante el campo "timestamp" utilizando el operador between
+	 * @param startTimestamp
+	 * @param endTimestamp
+	 * @return Flujo de objetos Coin
+	 */
+	Flux<Coin> findCoinsBetweenTimestamps(LocalDateTime startTimestamp, LocalDateTime endTimestamp);
 
-	Mono<AvgMaxDTO> getAvgAndMaxByTimestamps(LocalDateTime timestampOne, LocalDateTime timestampTwo);
+	/**
+	 * Realiza una búsqueda mediante el campo "timestamp" utilizando el operador between.
+	 * Recupera el valor máximo del campo "lprice"
+	 * @param startTimestamp
+	 * @param endTimestamp
+	 * @return Valor promedio y diferencia porcentual con respecto al valor máximo del precio de BTC
+	 */
+	Mono<AvgChgDTO> getAverageAndChangeByTimestamps(LocalDateTime startTimestamp, LocalDateTime endTimestamp);
 	
 	Mono<Coin> save(Coin coin);
 

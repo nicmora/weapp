@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wenance.weapp.dto.AvgMaxDTO;
+import com.wenance.weapp.dto.AvgChgDTO;
 import com.wenance.weapp.entity.Coin;
 import com.wenance.weapp.service.CoinService;
 
@@ -23,7 +23,7 @@ import reactor.core.publisher.Mono;
 public class CoinController {
 
 	@Autowired
-	CoinService coinService;
+	private CoinService coinService;
 
 	@GetMapping
 	public Flux<Coin> getAll() {
@@ -37,16 +37,16 @@ public class CoinController {
 	
 	@GetMapping("/get-coins")
 	public Flux<Coin> getCoinsBetweenTimestamps(
-			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampOne,
-			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampTwo) {
-		return coinService.findCoinsBetweenTimestamps(timestampOne, timestampTwo);
+			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime startTimestamp,
+			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime endTimestamp) {
+		return coinService.findCoinsBetweenTimestamps(startTimestamp, endTimestamp);
 	}
 
-	@GetMapping("/avg-max")
-	public Mono<AvgMaxDTO> getAverageAndMaxByTimestamps(
-			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampOne,
-			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime timestampTwo) {
-		return coinService.getAvgAndMaxByTimestamps(timestampOne, timestampTwo);
+	@GetMapping("/avg-chg")
+	public Mono<AvgChgDTO> getAverageAndChangeByTimestamps(
+			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime startTimestamp,
+			@RequestParam @NotNull @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime endTimestamp) {
+		return coinService.getAverageAndChangeByTimestamps(startTimestamp, endTimestamp);
 	}
 
 }

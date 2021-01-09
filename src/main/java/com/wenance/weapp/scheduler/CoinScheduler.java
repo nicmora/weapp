@@ -14,30 +14,35 @@ import com.wenance.weapp.service.CoinService;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
-@Component
 @Slf4j
+@Component
 public class CoinScheduler {
 
 	@Autowired
-	CexService cexService;
+	private CexService cexService;
 
 	@Autowired
-	CoinService coinService;
+	private CoinService coinService;
 
+	/*
+	 * Este método está configurado para ejecutarse cada 10 segundos automáticamente.
+	 * Su función es llamar al servicio cexService que retorna un string
+	 * con el siguiente formato: {"lprice":"31500.5","curr1":"BTC","curr2":"USD"}.
+	 * Luego se construye la entidad para ser persistida mediante el servicio coinService.
+	 */
 	@Scheduled(fixedRate = 10000)
 	public void fetchAndSaveCoin() {
 
-		Mono<String> monoResponse = cexService.updatePrice();
+		Mono<String> monoResponse = cexService.fetchPrice();
 		monoResponse.subscribe(response -> {
-			Coin coin = null;
 			try {
-				coin = new ObjectMapper().readValue(response, Coin.class);
+				Coin coin = new ObjectMapper().readValue(response, Coin.class);
 				coin.setTimestamp(LocalDateTime.now());
+				CoinScheduler.log.info(coin.toString());
+				coinService.save(coin);
 			} catch (Exception e) {
 				throw new RuntimeException(e.getMessage());
 			}
-			CoinScheduler.log.info(coin.toString());
-			coinService.save(coin);
 		});
 
 	}

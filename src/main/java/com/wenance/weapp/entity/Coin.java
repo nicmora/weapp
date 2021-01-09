@@ -15,15 +15,15 @@ import org.springframework.format.annotation.NumberFormat.Style;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Builder
+@Entity
 public class Coin {
 
 	@Id

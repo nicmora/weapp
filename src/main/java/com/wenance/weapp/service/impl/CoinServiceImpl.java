@@ -1,28 +1,28 @@
 package com.wenance.weapp.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wenance.weapp.dto.AvgMaxDTO;
+import com.wenance.weapp.dto.AvgChgDTO;
 import com.wenance.weapp.entity.Coin;
 import com.wenance.weapp.repository.CoinRepository;
 import com.wenance.weapp.service.CoinService;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Service
 public class CoinServiceImpl implements CoinService {
 
-	private static final Logger logger = LoggerFactory.getLogger(CoinService.class);
-
 	@Autowired
-	CoinRepository coinRepository;
+	private CoinRepository coinRepository;
 
 	@Override
 	public Flux<Coin> findAll() {
@@ -35,22 +35,29 @@ public class CoinServiceImpl implements CoinService {
 	}
 
 	@Override
-	public Flux<Coin> findCoinsBetweenTimestamps(LocalDateTime timestampOne, LocalDateTime timestampTwo) {
-		return Flux.fromIterable(coinRepository.findByTimestampBetween(timestampOne, timestampTwo));
+	public Flux<Coin> findCoinsBetweenTimestamps(LocalDateTime startTimestamp, LocalDateTime endTimestamp) {
+		return Flux.fromIterable(coinRepository.findByTimestampBetween(startTimestamp, endTimestamp));
 	}	
 
 	@Override
-	public Mono<AvgMaxDTO> getAvgAndMaxByTimestamps(LocalDateTime timestampOne, LocalDateTime timestampTwo) {
-		Flux<Coin> fluxCoin = Flux.fromIterable(coinRepository.findByTimestampBetween(timestampOne, timestampTwo));
-		Mono<AvgMaxDTO> monoAvgMax = fluxCoin.collect(Collectors.summarizingDouble(Coin::getLprice)).flatMap(sum -> {
-			Double avg = sum.getAverage();
-			Double max = sum.getMax();
-			return Mono.just(new AvgMaxDTO(avg, max));
+	public Mono<AvgChgDTO> getAverageAndChangeByTimestamps(LocalDateTime startTimestamp, LocalDateTime endTimestamp) {
+		
+		Flux<Coin> fluxCoin = Flux.fromIterable(coinRepository.findByTimestampBetween(startTimestamp, endTimestamp));
+		Mono<Double> monoMax = Mono.just(coinRepository.getMaxLprice());
+		
+		Mono<AvgChgDTO> monoAvgMax = fluxCoin.collect(Collectors.averagingDouble(Coin::getLprice)).flatMap(avg -> {	
+			
+			double max = monoMax.block();
+			double chgAux = avg/max - 1;
+			BigDecimal chg = new BigDecimal(chgAux).setScale(5, RoundingMode.HALF_UP);
+			return Mono.just(new AvgChgDTO(max, chg.doubleValue()));
+			
 		});
 
-		fluxCoin.subscribe(n -> logger.info("AVG MAX :" + n.toString()));
+		fluxCoin.subscribe(n -> CoinServiceImpl.log.info("AVG MAX :" + n.toString()));
 
 		return monoAvgMax;
+		
 	}
 
 	@Override

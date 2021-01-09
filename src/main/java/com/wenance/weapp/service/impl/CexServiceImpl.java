@@ -15,7 +15,7 @@ public class CexServiceImpl implements CexService {
 	private WebClient webClient;
 
 	@Override
-	public Mono<String> updatePrice() {
+	public Mono<String> fetchPrice() {
 		return webClient.get()
 				.uri("/last_price/BTC/USD")
 				.retrieve()
