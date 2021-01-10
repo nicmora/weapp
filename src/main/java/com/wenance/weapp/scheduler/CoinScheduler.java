@@ -1,6 +1,7 @@
 package com.wenance.weapp.scheduler;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -41,7 +42,8 @@ public class CoinScheduler {
 		monoResponse.subscribe(response -> {
 			try {
 				Coin coin = new ObjectMapper().readValue(response, Coin.class);
-				coin.setTimestamp(LocalDateTime.now());
+				LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+				coin.setTimestamp(now);
 				CoinScheduler.log.info(coin.toString());
 				coinService.save(coin);
 			} catch (Exception e) {
