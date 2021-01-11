@@ -30,10 +30,7 @@ public class CoinScheduler {
 	private CoinService coinService;
 
 	/*
-	 * Este método está configurado para ejecutarse cada 10 segundos automáticamente.
-	 * Su función es llamar al servicio cexService que retorna un string
-	 * con el siguiente formato: {"lprice":"31500.5","curr1":"BTC","curr2":"USD"}.
-	 * Luego se construye la entidad para ser persistida mediante el servicio coinService.
+	 * Método programado para ejecutarse cada 10 segundos
 	 */
 	@Scheduled(fixedRate = 10000)
 	public void fetchAndSaveCoin() {
@@ -42,9 +39,11 @@ public class CoinScheduler {
 		monoResponse.subscribe(response -> {
 			try {
 				Coin coin = new ObjectMapper().readValue(response, Coin.class);
+				// Se omite los milisegundos
 				LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 				coin.setTimestamp(now);
 				CoinScheduler.log.info(coin.toString());
+				
 				coinService.save(coin);
 			} catch (Exception e) {
 				throw new RuntimeException(e.getMessage());

@@ -28,7 +28,7 @@ public class CoinExceptionHandler {
 		CoinError coinError = new CoinError(
 				LocalDateTime.now(), 
 				status, 
-				"WEAPP-ERROR " + e.getMessage());
+				"--- WEAPP-ERROR --- " + e.getMessage());
 		
 		return new ResponseEntity<CoinError>(coinError, status);
 	}

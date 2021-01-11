@@ -47,21 +47,25 @@ public class CoinServiceImpl implements CoinService {
 	public Mono<AvgChgDTO> getAverageAndChangeByTimestamps(LocalDateTime startTimestamp, LocalDateTime endTimestamp) {
 		
 		Flux<Coin> fluxCoin = Flux.fromIterable(coinRepository.findByTimestampBetween(startTimestamp, endTimestamp));
-		Mono<Double> monoMax = Mono.just(coinRepository.getMaxLprice());
+		fluxCoin.subscribe(n -> CoinServiceImpl.log.info("AVG MAX :" + n.toString()));
 		
-		Mono<AvgChgDTO> monoAvgMax = fluxCoin.collect(Collectors.averagingDouble(Coin::getLprice)).flatMap(avg -> {	
+		Mono<AvgChgDTO> monoAvgMax = fluxCoin.collectList().flatMap(coins -> {
 			
-			double max = monoMax.block();
-			double chgAux = avg/max - 1;
-			BigDecimal chg = new BigDecimal(chgAux).setScale(5, RoundingMode.HALF_UP);
-			return Mono.just(new AvgChgDTO(max, chg.doubleValue()));
+			if(!coins.isEmpty()) {		
+				double avg = coins.stream().collect(Collectors.averagingDouble(Coin::getLprice));
+				double max = coinRepository.getMaxLprice();
+				double chgAux = avg / max - 1;
+				// Se utiliza BigDecimal para redondear el resultado y dar formato
+				BigDecimal chg = new BigDecimal(chgAux).setScale(5, RoundingMode.HALF_UP);
+				
+				return Mono.just(new AvgChgDTO(max, chg.doubleValue()));		
+			} else {
+				return Mono.empty();
+			}
 			
 		});
-
-		fluxCoin.subscribe(n -> CoinServiceImpl.log.info("AVG MAX :" + n.toString()));
-
-		return monoAvgMax;
-		
+				
+		return monoAvgMax;	
 	}
 
 	@Override
