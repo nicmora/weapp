@@ -33,7 +33,7 @@ Abrir una terminal. Asegurarse de estar en el  directorio del proyecto. Luego, e
 
 Una vez realizada la compilación exitosamente. Dirigirse a la carpeta ***/target*** dentro del proyecto y ejecutar el comando:
 
-`java -jar weapp-1.0.0`
+`java -jar weapp-1.0.0.jar`
 
 Realizar pruebas con un software como Postman. Se agregó al repositorio la coleccioón de API request para correr con dicho programa.
 Asegurarse de ingresar los ***timestaps***  (input de la request) actualizados y en el formato correcto (**"dd/MM/yyyy HH:mm:ss"**).
