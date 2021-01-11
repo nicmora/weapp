@@ -19,8 +19,7 @@ public class CexServiceImpl implements CexService {
 		return webClient.get()
 				.uri("/last_price/BTC/USD")
 				.retrieve()
-				.bodyToMono(String.class)
-				.log("--- cex.io ---");
+				.bodyToMono(String.class);
 	}
 
 }
