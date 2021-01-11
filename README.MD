@@ -50,8 +50,13 @@ Los Javadocs se encuentran en las interfaces de los servicios.
 
 El método que calcula el average y diferencia porcentual con respecto al máximo, se podría haber resuelto en gran parte desde una consulta en el repositorio. Por ejemplo, utilizando:
 
-@Query(value = "SELECT AVG(c.lprice) as average, MAX(c.lprice) as max FROM Coin c WHERE timestamp >= :timestampOne and timestamp <= :timestampTwo GROUP BY c.curr1, c.curr2", nativeQuery = true)
-AvgMaxDTO getAvgAndMaxByTimestampBetween(@Param("timestampOne") LocalDateTime timestampOne, @Param("timestampTwo") LocalDateTime timestampTwo);
+```
+@Query(value = "SELECT AVG(c.lprice) as average, MAX(c.lprice) as max FROM Coin c
+  WHERE timestamp >= :startTimestamp and timestamp <= :endTimestamp GROUP BY c.curr1, c.curr2", nativeQuery = true)
+AvgMaxDTO getAvgAndMaxByTimestampBetween(
+  @Param("startTimestamp") LocalDateTime startTimestamp, 
+  @Param("endTimestamp") LocalDateTime endTimestamp);
+```
 
 Se tomó la decisión de traer la lista de registros y realizar los calculos utilizando los métodos y funciones que ofrece Flux/Mono/Streams, que es un concepto a evaluar según el enunciado.
 
