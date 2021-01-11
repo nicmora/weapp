@@ -58,7 +58,7 @@ public class CoinServiceImpl implements CoinService {
 				// Se utiliza BigDecimal para redondear el resultado y dar formato
 				BigDecimal chg = new BigDecimal(chgAux).setScale(5, RoundingMode.HALF_UP);
 				
-				return Mono.just(new AvgChgDTO(max, chg.doubleValue()));		
+				return Mono.just(new AvgChgDTO(avg, chg.doubleValue()));		
 			} else {
 				return Mono.empty();
 			}
