@@ -52,13 +52,14 @@ public class CoinServiceImpl implements CoinService {
 		Mono<AvgChgDTO> monoAvgMax = fluxCoin.collectList().flatMap(coins -> {
 			
 			if(!coins.isEmpty()) {		
-				double avg = coins.stream().collect(Collectors.averagingDouble(Coin::getLprice));
+				double avgAux = coins.stream().collect(Collectors.averagingDouble(Coin::getLprice));
 				double max = coinRepository.getMaxLprice();
-				double chgAux = avg / max - 1;
+				double chgAux = avgAux / max - 1;
 				// Se utiliza BigDecimal para redondear el resultado y dar formato
+				BigDecimal avg = new BigDecimal(avgAux).setScale(2, RoundingMode.HALF_UP);
 				BigDecimal chg = new BigDecimal(chgAux).setScale(5, RoundingMode.HALF_UP);
 				
-				return Mono.just(new AvgChgDTO(avg, chg.doubleValue()));		
+				return Mono.just(new AvgChgDTO(avg.doubleValue(), chg.doubleValue()));		
 			} else {
 				return Mono.empty();
 			}
