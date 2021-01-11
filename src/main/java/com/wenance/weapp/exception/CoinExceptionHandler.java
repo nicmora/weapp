@@ -15,20 +15,20 @@ public class CoinExceptionHandler {
 	@ExceptionHandler(ServerWebInputException.class)
 	protected ResponseEntity<CoinError> handleServerWebInputException(ServerWebInputException e) {
 		e.printStackTrace();
-		return buildCoinError(HttpStatus.BAD_REQUEST, e);
+		return buildCoinError(HttpStatus.BAD_REQUEST, "Error al ingresar los datos");
 	}
 	
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<CoinError> handleException(Exception e) {
 		e.printStackTrace();
-		return buildCoinError(HttpStatus.INTERNAL_SERVER_ERROR, e);
+		return buildCoinError(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno en el servidor");
 	}
 	
-	private ResponseEntity<CoinError> buildCoinError(HttpStatus status, Exception e) {
+	private ResponseEntity<CoinError> buildCoinError(HttpStatus status, String msg) {
 		CoinError coinError = new CoinError(
 				LocalDateTime.now(), 
 				status, 
-				"--- WEAPP-ERROR --- " + e.getMessage());
+				"--- WEAPP-ERROR --- " + msg);
 		
 		return new ResponseEntity<CoinError>(coinError, status);
 	}
