@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "2ddbaa41-567c-49c9-8c75-9c7d06416daf",
+		"name": "Weapp-Request-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/coins",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"coins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET coin by timestamp",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/coins/get-coin?timestamp=01/01/2021 20:30:45",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"coins",
+						"get-coin"
+					],
+					"query": [
+						{
+							"key": "timestamp",
+							"value": "01/01/2021 20:30:45"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET coins by timestamp between",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/coins/get-coins?startTimestamp=01/01/2021 20:30:45&endTimestamp=01/01/2021 20:30:55",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"coins",
+						"get-coins"
+					],
+					"query": [
+						{
+							"key": "startTimestamp",
+							"value": "01/01/2021 20:30:45"
+						},
+						{
+							"key": "endTimestamp",
+							"value": "01/01/2021 20:30:55"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Average Change MAX",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/coins/avg-chg?startTimestamp=01/01/2021 20:30:45&endTimestamp=01/01/2021 20:40:45",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"coins",
+						"avg-chg"
+					],
+					"query": [
+						{
+							"key": "startTimestamp",
+							"value": "01/01/2021 20:30:45"
+						},
+						{
+							"key": "endTimestamp",
+							"value": "01/01/2021 20:40:45"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
